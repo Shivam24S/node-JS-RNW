@@ -1,7 +1,11 @@
-const fs = require("fs");
+const http = require("http");
 
-fs.writeFileSync("hello.txt", "hello");
+const server = http.createServer((req, res) => {
+  res.end("hello");
+});
 
-const data = fs.readFileSync("hello.txt", "utf-8");
+const port = 5000;
 
-console.log(data);
+server.listen(port, () => {
+  console.log("server listing on port", port);
+});
