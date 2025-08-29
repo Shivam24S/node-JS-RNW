@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EJS Template CRUD operation</title>
+  </head>
+  <body>
+    <h2>Student list</h2>
+    <a href="/add">Add student</a>
+    <ul>
+      <% students.forEach(function(student) { %>
+      <li>
+        <%= student.name %> (Age: <%= student.age %>)
+        <a href="/edit/<%= student.id %>">Edit</a>
+        <a href="/delete/<%= student.id %>">Delete</a>
+      </li>
+      <% }); %>
+    </ul>
+  </body>
+</html>
