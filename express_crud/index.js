@@ -4,66 +4,90 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("hello from server");
-});
-
-const students = [
-  {
-    id: 1,
-    name: "shiv",
-  },
+let students = [
+  { id: 1, name: "shiva" },
   {
     id: 2,
     name: "rahul",
   },
 ];
 
-// const students = "";
+app.get("/", (req, res) => {
+  res.send("hello from server");
+});
 
-// read
-app.get("/student", (req, res) => {
+app.get("/students", (req, res) => {
   if (students.length === 0) {
-    res.send("no student found");
+    return res.status(404).json("student data not found");
   }
 
-  res.json(students);
+  res.status(200).json({ message: "student data found", students });
 });
 
 app.get("/student/:id", (req, res) => {
   const id = parseInt(req.params.id);
 
-  console.log("id", id);
-
   const student = students.find((std) => std.id === id);
 
   if (!student) {
-    res.json("id not found");
-    return;
+    return res.status(404).json("student not found with this id");
   }
 
-  res.json({ message: "student data found", student });
+  res.status(200).json({ message: "student found", student });
 });
 
-const port = process.env.PORT || 5000;
+app.post("/student/add", (req, res) => {
+  console.log(req.body.name);
 
-app.listen(port, (err) => {
-  if (err) {
-    console.log(err);
-    return;
+  const newStudent = {
+    id: new Date().getTime(),
+    name: req.body,
+  };
+
+  students.push(newStudent);
+
+  res.status(201).json({ message: "student data added", newStudent });
+});
+
+app.patch("/student/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+
+  const index = students.findIndex((std) => std.id === id);
+
+  if (index == -1) {
+    return res.status(404).json("student data not found");
   }
 
+  students[index] = { ...students[index], ...req.body };
+
+  res.status(200).json({
+    message: "student data updated successfully",
+    student: students[index],
+  });
+});
+
+app.delete("/student/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+
+  // students = students.filter((std) => std.id !== id);
+
+  // res.status(200).json({ message: "student data deleted" });
+
+  const index = students.findIndex((std) => std.id === id);
+
+  if (index == -1) {
+    return res.status(404).json("student data not found with this id");
+  }
+
+  const deleteStudent = students[index];
+
+  students.splice(index, 1);
+
+  res.status(200).json({ message: "student data deleted", deleteStudent });
+});
+
+const port = 5000;
+
+app.listen(port, () => {
   console.log(`server running on port ${port}`);
 });
-
-// import http from "http";
-
-// using http
-
-// const server = http.createServer(app);
-
-// const port = 5001;
-
-// server.listen(port, () => {
-//   console.log("server listening on port", port);
-// });
