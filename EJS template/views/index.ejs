@@ -3,19 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EJS Template CRUD operation</title>
+    <title>EJS</title>
   </head>
   <body>
-    <h2>Student list</h2>
-    <a href="/add">Add student</a>
+    <h1>students</h1>
+
+    <a href="/add">add student</a>
+
     <ul>
-      <% students.forEach(function(student) { %>
+      <% students.forEach(student=>{%>
+
       <li>
-        <%= student.name %> (Age: <%= student.age %>)
-        <a href="/edit/<%= student.id %>">Edit</a>
-        <a href="/delete/<%= student.id %>">Delete</a>
+        <%= student.name %>
+        <a href="/edit/<%=student.id %>">edit</a>
+        <a href="/delete/<%=student.id %>">delete</a>
       </li>
-      <% }); %>
+
+      <%})%>
     </ul>
   </body>
 </html>
