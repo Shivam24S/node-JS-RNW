@@ -2,13 +2,8 @@ import express from "express";
 
 import httpError from "./middleware/errorHandler.js";
 import connectDb from "./db/mongoose.js";
-import taskRoutes from "./routes/taskRoutes.js";
 
 const app = express();
-
-app.use(express.json());
-
-app.use("/task", taskRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json("hello from server");
@@ -17,21 +12,17 @@ app.get("/", (req, res) => {
 // undefined routes
 
 app.use((req, res, next) => {
-  const error = res.status(404).json("requested route not founded");
-
+  const error = res.status(404).json("requested route not found");
   next(new httpError(error));
 });
 
-// centralize error
-
 app.use((error, req, res, next) => {
-  if (req.headerSent) {
+  if (res.headerSent) {
     next(error);
   }
-
   res
     .status(error.statusCode || 500)
-    .json(error.message || "something went wrong try again later");
+    .json(error.message || "something went wrong please try again later");
 });
 
 const port = 5000;
@@ -41,11 +32,11 @@ async function startServer() {
     const connect = await connectDb();
 
     if (!connect) {
-      throw new Error("connection failed to db");
+      throw new Error("failed to connect");
     }
 
     app.listen(port, () => {
-      console.log("server running on ", port);
+      console.log("server running on port", port);
     });
   } catch (error) {
     console.log(error.message);
