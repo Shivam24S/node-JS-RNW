@@ -25,8 +25,8 @@ app.use((req, res, next) => {
 // centralize error
 
 app.use((error, req, res, next) => {
-  if (req.headerSent) {
-    next(error);
+  if (req.headersSent) {
+    return next(error);
   }
 
   res
