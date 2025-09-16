@@ -66,4 +66,58 @@ const deleteTask = async (req, res, next) => {
   }
 };
 
-export default { addTask, getAllTask, getSpecificTask, deleteTask };
+// const updateTask = async (req, res, next) => {
+//   try {
+//     const id = req.params.id;
+
+//     const taskUpdate = await TaskModel.findByIdAndUpdate(id, req.body, {
+//       new: true,
+//     });
+
+//     if (!taskUpdate) {
+//       return next(new httpError("id not found for update", 404));
+//     }
+
+//     await taskUpdate.save();
+
+//     res.status(200).json({ message: "task updated", taskUpdate });
+//   } catch (error) {
+//     next(new httpError(error.message));
+//   }
+// };
+
+const updateTask = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+
+    const existingTask = await TaskModel.findById(id);
+
+    if (!existingTask) {
+      return next(new httpError("id not found for update", 404));
+    }
+
+    const updates = Object.keys(req.body);
+
+    const allowField = ["task", "description"];
+
+    const isValidUpdate = updates.every((field) => allowField.includes(field));
+
+    if (!isValidUpdate) {
+      return next(new httpError("only allowed field can be updated", 400));
+    }
+
+    updates.forEach((update) => {
+      existingTask[update] = req.body[update];
+    });
+
+    await existingTask.save();
+
+    res
+      .status(200)
+      .json({ message: "task updated successfully", existingTask });
+  } catch (error) {
+    next(new httpError(error.message));
+  }
+};
+
+export default { addTask, getAllTask, getSpecificTask, deleteTask, updateTask };
