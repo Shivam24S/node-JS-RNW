@@ -1,6 +1,9 @@
 import express from "express";
 
+import dotenv from "dotenv";
 import fileRouter from "./routes/fileRoutes.js";
+
+dotenv.config({ path: "./.dev.env" });
 
 const app = express();
 
