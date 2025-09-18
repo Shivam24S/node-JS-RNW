@@ -1,14 +1,18 @@
 import express from "express";
-
-import uploads from "../middleware/fileUploads.js";
+import uploads from "../middleware/fileUpload.js";
 
 const router = express.Router();
 
 router.post("/add", uploads.single("file"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json("no file selected");
+  try {
+    if (!req.file) {
+      throw new Error("file not selected");
+    }
+
+    res.status(201).json({ message: "file uploaded", file: req.body });
+  } catch (error) {
+    console.log(error);
   }
-  res.status(201).json({ message: "file uploaded", file: req.file });
 });
 
 export default router;
