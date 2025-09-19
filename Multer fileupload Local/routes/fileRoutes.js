@@ -13,7 +13,7 @@ router.post("/add", uploads.single("file"), (req, res, error) => {
       }
     }
 
-    res.status(201).json({ message: "file uploaded", file: req.file.path });
+    res.status(201).json({ message: "file uploaded", file: req.file });
   } catch (error) {
     console.log(error);
   }
