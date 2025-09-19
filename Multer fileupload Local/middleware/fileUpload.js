@@ -17,7 +17,7 @@ const uploads = multer({
     const allowedFile = ["image/jpeg", "image/jpg", "image/png"];
 
     if (!allowedFile.includes(file.mimetype)) {
-      cb(new Error("file type is not valid"));
+      return cb(new Error("file type is not valid"));
     }
     cb(null, true);
   },

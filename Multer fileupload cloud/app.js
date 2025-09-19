@@ -1,12 +1,15 @@
+import dotenv from "dotenv";
 import express from "express";
 
-import fileRouter from "./routes/fileRoutes.js";
+import fileRoute from "./routes/fileRoutes.js";
+
+dotenv.config({ path: "./.dev.env" });
 
 const app = express();
 
 app.use(express.json());
 
-app.use("/file", fileRouter);
+app.use("/file", fileRoute);
 
 app.get("/", (req, res) => {
   res.status(200).json("hello from server");
@@ -15,5 +18,5 @@ app.get("/", (req, res) => {
 const port = 5000;
 
 app.listen(port, () => {
-  console.log("server listening on port", port);
+  console.log("server running on port", port);
 });
