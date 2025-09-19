@@ -34,14 +34,21 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "uploads",
-    allowed_formats: ["jpg", "jpeg", "png"],
-    transformation: [{ width: 800, height: 800, crop: "limit" }],
+    allowed_formats: ["jpg", "png", "jpeg"],
+    transformation: [{ height: 500, width: 500, crop: "limit" }],
   },
 });
 
-const upload = multer({
+const uploads = multer({
   storage,
   limits: { fileSize: 2 * 1024 * 1024 },
-});
+  fileFilter: function (req, file, cb) {
+    const allowedFile = ["image/jpg", "image/png", "image/jpeg"];
 
-export default upload;
+    if (!allowedFile.includes(file.mimetype)) {
+      return cb(new Error("file not valid"));
+    }
+    cb(null, true);
+  },
+});
+export default uploads;
