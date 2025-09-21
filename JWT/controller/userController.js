@@ -40,4 +40,20 @@ const login = async (req, res, next) => {
   }
 };
 
-export default { addUser, login };
+const authLogin = async (req, res, next) => {
+  try {
+    const requestedUSer = req.user;
+
+    const user = await User.findById(requestedUSer);
+
+    if (!user) {
+      throw new Error("user not found");
+    }
+
+    return res.status(200).json({ message: "user found", user });
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+};
+
+export default { addUser, login, authLogin };
