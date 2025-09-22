@@ -1,16 +1,27 @@
 import express from "express";
 
 import connectDb from "./config/db.js";
-import userRouter from "./routes/userRoutes.js";
+import httpError from "./middleware/errorHandler.js";
 
 const app = express();
 
-app.use(express.json());
-
-app.use("/user", userRouter);
-
 app.get("/", (req, res) => {
   res.status(200).json("hello from server");
+});
+
+// undefined routes
+app.use((req, res, next) => {
+  next(new httpError("requested route not found", 404));
+});
+
+app.use((error, req, res, next) => {
+  if (req.headersSent) {
+    next(error);
+  }
+
+  res
+    .status(error.statusCode || 500)
+    .json(error.message || "something went wrong  please try again later");
 });
 
 const port = 5000;
