@@ -58,7 +58,7 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-userSchema.statics.findBycreadiantial = async function (email, password) {
+userSchema.statics.findByCredential = async function (email, password) {
   try {
     const user = await this.findOne({ email });
 
@@ -82,15 +82,13 @@ userSchema.methods.generateAuthToken = async function () {
   try {
     const user = this;
 
-    const token = jwt.sign({ _id: user._id }, "authToken");
-
-    if (!token) {
-      throw new Error("failed to generate auth token");
-    }
+    const token = jwt.sign({ _id: user._id.toString() }, "authTokenSecret");
 
     user.tokens = user.tokens.concat({ token });
 
-    user.sava();
+    await user.save();
+
+    return token;
   } catch (error) {
     throw new Error(error.message);
   }
