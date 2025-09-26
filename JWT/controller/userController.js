@@ -57,4 +57,38 @@ const authLogin = async (req, res, next) => {
   }
 };
 
-export default { add, login, authLogin };
+const logOut = async (req, res, next) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((t) => {
+      return t.token !== req.token;
+    });
+
+    await req.user.save();
+
+    res.status(200).json({ message: "user logOut successfully" });
+  } catch (error) {
+    next(new httpError(error.message, 500));
+  }
+};
+
+const logOutAll = async (req, res, next) => {
+  try {
+    req.user.tokens = [];
+
+    await req.user.save();
+
+    res
+      .status(200)
+      .json({ message: "user logout successfully from All device" });
+  } catch (error) {
+    next(new httpError(error.message));
+  }
+};
+
+const update = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+  } catch (error) {}
+};
+
+export default { add, login, authLogin, logOut, logOutAll };
