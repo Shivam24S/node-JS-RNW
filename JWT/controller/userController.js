@@ -88,7 +88,51 @@ const logOutAll = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
-  } catch (error) {}
+
+    const user = await User.findOne({ email });
+
+    if (user) {
+      return next(new httpError("user with this email id already exist", 400));
+    }
+
+    const updates = Object.keys(req.body);
+
+    const allowedUpdates = ["name", "email", "password"];
+
+    const isValid = updates.every((field) => allowedUpdates.includes(field));
+
+    if (!isValid) {
+      return next(new httpError("only allowed field can be updated", 400));
+    }
+
+    updates.forEach((update) => {
+      req.user[update] = req.body[update];
+    });
+
+    await req.user.save();
+
+    res.status(200).json({ message: "user data updated", user: req.user });
+  } catch (error) {
+    next(new httpError(error.message, 500));
+  }
 };
 
-export default { add, login, authLogin, logOut, logOutAll };
+const deleteUser = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndDelete(req.user._id);
+
+    if (!user) {
+      return next(new httpError("failed to delete user id", 400));
+    }
+
+    res.status(200).json({ message: "user account deleted successfully" });
+  } catch (error) {
+    next(new httpError(error.message, 500));
+  }
+};
+
+// if(pm.response.code === 200 || 201){
+//     pm.environment.set("authToken",pm.response.json().token)
+// }
+
+export default { add, login, authLogin, logOut, logOutAll, update, deleteUser };
