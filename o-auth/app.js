@@ -5,13 +5,20 @@ dotenv.config({ path: "./env/.dev.env" });
 import express from "express";
 
 import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 
-app.use(express.json);
+app.use(express.json());
+
+app.use("/auth", authRoutes);
+
+app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.status(200).json("hello from server");
+  //   res.status(200).json("hello from server");
+
+  res.render("home");
 });
 
 const port = process.env.PORT || 5000;
