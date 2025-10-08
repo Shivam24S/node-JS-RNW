@@ -3,10 +3,15 @@ import dotenv from "dotenv";
 dotenv.config({ path: "./env/.dev.env" });
 
 import express from "express";
-import connectDB from "./config/db.js";
-import HttpError from "./middleware/errorHandler.js";
+import connectDB from "./configs/db.js";
+import HttpError from "./middlewares/errorHandler.js";
+import userRouter from "./routes/userRoutes.js";
 
 const app = express();
+
+app.use(express.json());
+
+app.use("/user", userRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json("hello from server");
