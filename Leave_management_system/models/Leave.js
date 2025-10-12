@@ -6,6 +6,9 @@ const LeaveSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  employeeName: {
+    type: String,
+  },
   startDate: {
     type: Date,
     required: true,
@@ -33,7 +36,7 @@ const LeaveSchema = new mongoose.Schema({
   approvedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    // required: true,
   },
   rejectMessage: {
     type: String,
@@ -42,4 +45,6 @@ const LeaveSchema = new mongoose.Schema({
   },
 });
 
-export default LeaveSchema;
+const Leave = mongoose.model("Leaves", LeaveSchema);
+
+export default Leave;
