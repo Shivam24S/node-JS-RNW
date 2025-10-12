@@ -50,7 +50,9 @@ const login = async (req, res, next) => {
       next(new HttpError("unable to login", 400));
     }
 
-    return res.status(200).json({ message: "user logged in", user });
+    const token = await user.generateAuthToken();
+
+    return res.status(200).json({ message: "user logged in", user, token });
   } catch (error) {
     return next(new HttpError(error.message, 500));
   }
@@ -70,17 +72,47 @@ const update = async (req, res, next) => {
       return next(new HttpError("only allowed field can be update", 400));
     }
 
-    const user = req.user.id;
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return next(new HttpError("user not found", 404));
+    }
 
     const { email } = req.body;
 
     if (email) {
       const existingUser = await User.findOne({ email });
 
-      if (existingUser & (existingUser._id.toString() != user))
+      if (existingUser && existingUser._id.toString() != user._id.toString())
         return next(new HttpError("user already exists", 400));
     }
-  } catch (error) {}
+
+    updates.forEach((field) => {
+      user[field] = req.body[field];
+    });
+
+    await user.save();
+
+    res.status(200).json({ message: "user data updated successfully", user });
+  } catch (error) {
+    return next(new HttpError(error.message, 500));
+  }
 };
 
-export default { addUser, login };
+const deleteUser = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndDelete(req.user.id);
+
+    if (!user) {
+      next(new HttpError("failed to delete user", 500));
+    }
+
+    res.status(200).json("user deleted successfully");
+  } catch (error) {
+    return next(new HttpError(error.message, 500));
+  }
+};
+
+export default { addUser, login, update, deleteUser };
