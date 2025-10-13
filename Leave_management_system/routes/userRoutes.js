@@ -23,6 +23,4 @@ router.patch(
   userController.update
 );
 
-router.delete("/delete", auth, userController.deleteUser);
-
 export default router;

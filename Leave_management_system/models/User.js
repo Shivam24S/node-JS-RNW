@@ -35,7 +35,6 @@ const UserSchema = new mongoose.Schema(
       {
         token: {
           type: String,
-          required: true,
         },
       },
     ],
@@ -84,8 +83,9 @@ UserSchema.methods.generateAuthToken = async function () {
     const user = this;
 
     const token = jwt.sign(
-      { id: user._id.toString() },
-      process.env.JWT_SECRET_KEY
+      { _id: user._id.toString() },
+      process.env.JWT_SECRET
+      // {expiresIn:"1m"}
     );
 
     user.tokens = user.tokens.concat({ token });
@@ -94,7 +94,7 @@ UserSchema.methods.generateAuthToken = async function () {
 
     return token;
   } catch (error) {
-    throw new Error("failed to generate auth token");
+    throw new Error(error.message);
   }
 };
 

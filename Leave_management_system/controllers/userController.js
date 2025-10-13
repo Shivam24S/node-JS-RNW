@@ -101,18 +101,4 @@ const update = async (req, res, next) => {
   }
 };
 
-const deleteUser = async (req, res, next) => {
-  try {
-    const user = await User.findByIdAndDelete(req.user.id);
-
-    if (!user) {
-      next(new HttpError("failed to delete user", 500));
-    }
-
-    res.status(200).json("user deleted successfully");
-  } catch (error) {
-    return next(new HttpError(error.message, 500));
-  }
-};
-
-export default { addUser, login, update, deleteUser };
+export default { addUser, login, update };

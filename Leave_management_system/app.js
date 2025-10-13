@@ -6,15 +6,12 @@ import express from "express";
 import connectDB from "./configs/db.js";
 import HttpError from "./middlewares/errorHandler.js";
 import userRouter from "./routes/userRoutes.js";
-import leaveRouter from "./routes/leaveRoutes.js";
 
 const app = express();
 
 app.use(express.json());
 
 app.use("/user", userRouter);
-
-app.use("/leave", leaveRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json("hello from server");

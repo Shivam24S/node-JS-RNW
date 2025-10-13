@@ -1,23 +1,24 @@
 import jwt from "jsonwebtoken";
+
 import HttpError from "./errorHandler.js";
 import User from "../models/User.js";
 
 const auth = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    const authHeader = req.header("Authorization");
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return next(new HttpError("auth token needed", 400));
+      next(new HttpError("authorization failed", 500));
     }
 
-    const token = authHeader.replace("Bearer ", "").trim();
+    const token = authHeader.replace("Bearer ", "");
 
-    const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await User.findById(decode.id);
+    const user = await User.findOne({ _id: decode._id, "tokens.token": token });
 
     if (!user) {
-      return next(new HttpError("User not found", 404));
+      next(new HttpError("user not found", 404));
     }
 
     (req.user = user), (req.token = token);
