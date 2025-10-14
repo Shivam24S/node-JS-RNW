@@ -23,4 +23,12 @@ router.patch(
   userController.update
 );
 
+router.delete("/delete", auth, userController.deleteUser);
+
+router.post("/authLogin", auth, userController.authLogin);
+
+router.post("/logOut", auth, userController.logOut);
+
+router.post("/logOutAll", auth, userController.logOutAll);
+
 export default router;
