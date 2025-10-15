@@ -7,6 +7,8 @@ import connectDB from "./configs/db.js";
 import HttpError from "./middlewares/errorHandler.js";
 import userRouter from "./routes/userRoutes.js";
 import leaveRouter from "./routes/leaveRoutes.js";
+import Leave from "./models/Leave.js";
+import User from "./models/User.js";
 
 const app = express();
 
@@ -56,3 +58,28 @@ const startServer = async () => {
 };
 
 startServer();
+
+// populate explanation
+
+// const main = async (req, res, next) => {
+//   try {
+//     const leave = await Leave.findById("68ee1a13601727e5c62e2325");
+
+//     // console.log(leave.employeeId);
+
+//     // console.log(leave);
+
+//     // const user = await User.findById(leave.employeeId);
+
+//     const leaveData = await leave.populate(
+//       "employeeId",
+//       "name email department"
+//     );
+
+//     console.log(leaveData);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+// main();

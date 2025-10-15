@@ -6,7 +6,7 @@ const leaveValidation = Joi.object({
     "date.greater": "start date must be future date",
   }),
 
-  endDate: Joi.date().greater(ref("startDate")).required().messages({
+  endDate: Joi.date().greater(Joi.ref("startDate")).required().messages({
     "date.base": "end date must be valid date",
     "date.greater": "end date must be after start date",
   }),
