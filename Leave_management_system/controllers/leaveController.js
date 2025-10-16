@@ -71,16 +71,94 @@ const getTeamLeaves = async (req, res, next) => {
       return next(new HttpError("no leaves data found", 404));
     }
 
-    res
-      .status(200)
-      .json({
-        message: "team leave data retrived successfully",
-        total: leaves.length,
-        leaves,
-      });
+    res.status(200).json({
+      message: "team leave data retrived successfully",
+      total: leaves.length,
+      leaves,
+    });
   } catch (error) {
     return next(new HttpError(error.message, 500));
   }
 };
 
-export default { applyLeave, getMyLeaves, getTeamLeaves };
+const updateLeaves = async (req, res, next) => {
+  try {
+    const { status, rejectMessage } = req.body;
+
+    const id = req.params.id;
+
+    const leave = await Leave.findById(id).populate(
+      "employeeId",
+      "department role"
+    );
+
+    if (!leave) {
+      return next(new HttpError("leave not found", 404));
+    }
+
+    if (req.user.role === "manager") {
+      if (leave.employeeId.department !== req.user.department) {
+        return next(
+          new HttpError("you are not authorize to update leave status", 400)
+        );
+      }
+    }
+
+    leave.status = status;
+
+    leave.approvedBy = req.user.id;
+
+    if (status === "rejected" && rejectMessage) {
+      leave.rejectMessage = rejectMessage;
+    }
+
+    await leave.save();
+
+    await leave.populate("approvedBy", "name");
+
+    res.status(200).json({ message: "leave status updated", leave });
+  } catch (error) {
+    next(new HttpError(error.message, 500));
+  }
+};
+
+const leaveStats = async (req, res, next) => {
+  try {
+    const totalLeaves = await Leave.countDocuments();
+
+    const pendingLeavesCount = await Leave.countDocuments({
+      status: "pending",
+    });
+    const ApprovedLeavesCount = await Leave.countDocuments({
+      status: "approved",
+    });
+    const rejectedLeavesCount = await Leave.countDocuments({
+      status: "rejected",
+    });
+
+    const leaveData = {
+      totalLeaves,
+      pendingLeavesCount,
+      ApprovedLeavesCount,
+      rejectedLeavesCount,
+    };
+
+    if (!leaveData) {
+      return next(new HttpError("no leave data found"));
+    }
+
+    res
+      .status(200)
+      .json({ message: "leave stats retrived successfully", leaveData });
+  } catch (error) {
+    return next(new HttpError(error.message, 500));
+  }
+};
+
+export default {
+  applyLeave,
+  getMyLeaves,
+  getTeamLeaves,
+  updateLeaves,
+  leaveStats,
+};
