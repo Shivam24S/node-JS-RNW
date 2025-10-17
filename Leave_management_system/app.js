@@ -59,27 +59,18 @@ const startServer = async () => {
 
 startServer();
 
-// populate explanation
+// // populate explanation
 
 // const main = async (req, res, next) => {
-//   try {
-//     const leave = await Leave.findById("68ee1a13601727e5c62e2325");
+//   const leave = await Leave.findById("68ee1a13601727e5c62e2325");
 
-//     // console.log(leave.employeeId);
+//   // console.log("leave", leave);
 
-//     // console.log(leave);
+//   // console.log("leave user", leave.employeeId);
 
-//     // const user = await User.findById(leave.employeeId);
+//   const leaveData = await leave.populate("employeeId", "department role");
 
-//     const leaveData = await leave.populate(
-//       "employeeId",
-//       "name email department"
-//     );
-
-//     console.log(leaveData);
-//   } catch (error) {
-//     console.log(error);
-//   }
+//   console.log("leave", leaveData);
 // };
 
 // main();
