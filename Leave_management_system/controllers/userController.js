@@ -1,6 +1,8 @@
 import HttpError from "../middlewares/errorHandler.js";
 import User from "../models/User.js";
 // import registerUser from "../validations/userValidation.js";
+import sendEmail from "../utils/email.js";
+import welcomeEmailTemplate from "../templates/Welcome.js";
 
 const addUser = async (req, res, next) => {
   try {
@@ -35,6 +37,14 @@ const addUser = async (req, res, next) => {
     await saveUser.save();
 
     res.status(201).json({ message: "user created successfully", saveUser });
+
+    await sendEmail({
+      to: saveUser.email,
+      subject: "Welcome to Our App!",
+      // html: `<h2>Hello ${saveUser.name},</h2>
+      //    <p>Thank you for signing up. Your account has been successfully created.</p>`,
+      html: welcomeEmailTemplate(saveUser.name),
+    });
   } catch (error) {
     return next(new HttpError(error.message, 500));
   }
