@@ -5,13 +5,29 @@ const messageTemplate = document.querySelector("#msg-template").innerHTML;
 const messages = document.querySelector("#messages");
 
 socket.on("message", (message) => {
-  const html = Mustache.render(messageTemplate, { message });
+  const html = Mustache.render(messageTemplate, {
+    message: message.text,
+    createdAt: moment(message.createdAt).format("h:mm:a"),
+  });
 
   messages.insertAdjacentHTML("beforeend", html);
 });
 
 socket.on("newConnection", (msg) => {
   console.log(msg);
+});
+
+const locationTemplate = document.querySelector("#location-template").innerHTML;
+
+const locationMessage = document.querySelector("#location-msg");
+
+socket.on("location", (url) => {
+  const html = Mustache.render(locationTemplate, {
+    url: url.url,
+    createdAt: moment(url.createdAt).format("h:mm:a"),
+  });
+
+  locationMessage.insertAdjacentHTML("beforeend", html);
 });
 
 const $messageForm = document.querySelector("#msg-form");

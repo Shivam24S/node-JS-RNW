@@ -3,28 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>chat app</title>
+    <title>Chat App</title>
   </head>
   <body>
-    <h1>chat app</h1>
-    <form id="msg-form">
+    <h1>join chat room</h1>
+
+    <form action="./chat.html">
+      <label for="displayName">User Name</label>
       <input
         type="text"
-        name="message"
-        id="msg"
-        placeholder="enter your message"
+        placeholder="user name"
         autocomplete="off"
+        name="username"
+        required
       />
-      <button id="location">share location</button>
-      <button type="submit">send</button>
+      <br />
+      <br />
+
+      <label for="displayName">Room Name</label>
+      <input
+        type="text"
+        placeholder="room"
+        autocomplete="off"
+        name="room"
+        required
+      />
+      <br />
+      <br />
+      <button type="submit">join</button>
     </form>
-    <br />
-    <div id="messages"></div>
-    <script id="msg-template" type="text/html">
-      <div><p>{{message}}</p></div>
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
-    <script src="socket.io/socket.io.js"></script>
-    <script src="./chat.js"></script>
   </body>
 </html>
