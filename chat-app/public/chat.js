@@ -1,5 +1,13 @@
 const socket = io();
 
+const { username, room } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true,
+});
+
+socket.emit("join", { username, room });
+
+console.log("room", username, room);
+
 const messageTemplate = document.querySelector("#msg-template").innerHTML;
 
 const messages = document.querySelector("#messages");

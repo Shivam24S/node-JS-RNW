@@ -20,9 +20,16 @@ const io = new Server(server);
 io.on("connection", (socket) => {
   console.log("new websocket connection established");
 
-  io.emit("newConnection", generateMessage("a new user joined"));
+  socket.on("join", ({ username, room }) => {
+    socket.join(room);
 
-  socket.emit("message", generateMessage("welcome"));
+    io.to(room).emit(
+      "newConnection",
+      generateMessage(`${username} has joined`)
+    );
+
+    socket.to(room).emit("message", generateMessage(`welcome ${username}`));
+  });
 
   socket.on("sendMessage", (msg, callback) => {
     console.log(msg);
