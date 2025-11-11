@@ -4,7 +4,12 @@ const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
 
-socket.emit("join", { username, room });
+socket.emit("join", { username, room }, (err) => {
+  if (err) {
+    alert(err);
+    location.href = "/";
+  }
+});
 
 console.log("room", username, room);
 
