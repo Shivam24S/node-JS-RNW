@@ -36,21 +36,26 @@ io.on("connection", (socket) => {
     if (user) {
       socket.join(user.room);
     }
-
-    socket.broadcast
-      .to(user.room)
-      .emit("newConnection", generateMessage(`${user.username} has joined`));
-
     socket
       .to(user.room)
-      .emit("message", generateMessage(`welcome ${user.username}`));
+      .emit("message", generateMessage(`${user.username} has joined`));
+
+    io.to(user.room).emit(
+      "message",
+      generateMessage(`welcome ${user.username}`)
+    );
+
+    io.emit("roomData", {
+      room: user.room,
+      users: getUserInChatRoom(user.room),
+    });
   });
 
   socket.on("sendMessage", (msg, callback) => {
     const user = getUser(socket.id);
 
     if (user) {
-      io.to(user.room).emit("message", generateMessage(msg));
+      io.to(user.room).emit("message", generateMessage(user.username, msg));
       callback("message a received");
     }
   });
@@ -63,7 +68,10 @@ io.on("connection", (socket) => {
         .to(user.room)
         .emit(
           "location",
-          locationMessage(`https://google.com/maps?q=${lat},${lon}`)
+          locationMessage(
+            user.username,
+            `https://google.com/maps?q=${lat},${lon}`
+          )
         );
       callback("location received");
     }
@@ -76,8 +84,14 @@ io.on("connection", (socket) => {
       socket.broadcast
         .to(user.room)
         .emit("message", `${user.username} has left`);
+
+      removeUser(socket.id);
+
+      io.emit("roomData", {
+        room: user.room,
+        users: getUserInChatRoom(user.room),
+      });
     }
-    removeUser(socket.id);
   });
 });
 
