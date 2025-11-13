@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -32,5 +32,69 @@
       <br />
       <button type="submit">join</button>
     </form>
+  </body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat App</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- decorative animated background layers (doesn't change your form content) -->
+    <div class="bg-root">
+      <div class="bg-gradient"></div>
+      <div class="bg-blob blob-1"></div>
+      <div class="bg-blob blob-2"></div>
+      <div class="bg-grid"></div>
+      <svg
+        class="bg-noise"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 600 600"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1">
+            <stop offset="0" stop-color="rgba(255,255,255,0.03)" />
+            <stop offset="1" stop-color="rgba(255,255,255,0.01)" />
+          </linearGradient>
+        </defs>
+        <rect width="600" height="600" fill="url(#g1)" />
+      </svg>
+    </div>
+
+    <div class="container">
+      <div class="join-box">
+        <h1 class="title">Join Chat Room</h1>
+
+        <form action="./chat.html" class="join-form">
+          <label for="displayName" class="form-label">User Name</label>
+          <input
+            type="text"
+            placeholder="user name"
+            autocomplete="off"
+            name="username"
+            required
+            class="form-input"
+          />
+          <br />
+
+          <label for="displayName" class="form-label">Room Name</label>
+          <input
+            type="text"
+            placeholder="room"
+            autocomplete="off"
+            name="room"
+            required
+            class="form-input"
+          />
+          <br />
+
+          <button type="submit" class="btn-join">Join</button>
+        </form>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -44,6 +44,97 @@
         {{/users}}
       </ul>
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.14.0/qs.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="./chat.js"></script>
+  </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chat app</title>
+    <link rel="stylesheet" href="chat.css" />
+  </head>
+  <body>
+    <!-- top-left page title (keeps your #title id) -->
+    <h1 id="title">Chat App</h1>
+
+    <!-- big outer shell to reproduce the rounded container from screenshot -->
+    <div class="app-shell">
+      <!-- grid: sidebar + main chat -->
+      <div class="app-wrap">
+        <!-- LEFT column: Sidebar card -->
+        <aside class="sidebar-card card">
+          <!-- keep original #sidebar text node (unchanged) -->
+          <p id="sidebar" class="sidebar-heading">sidebar</p>
+
+          <!-- room content populated by your sidebar-template -->
+          <div id="sidebar-render" class="sidebar-render"></div>
+
+          <!-- users list container (templates will populate <ul> inside #sidebar-render) -->
+        </aside>
+
+        <!-- RIGHT column: Chat -->
+        <main class="chat-column">
+          <!-- messages area -->
+          <section class="messages-card card">
+            <div class="messages-scroll" id="messages"></div>
+          </section>
+
+          <!-- input area pinned at bottom; original form id preserved -->
+          <div class="input-wrap card">
+            <form id="msg-form" class="form-area" autocomplete="off">
+              <input
+                type="text"
+                name="message"
+                id="msg"
+                placeholder="Enter a message"
+                autocomplete="off"
+                required
+              />
+              <!-- keep DOM order: location button first, then submit.
+                   CSS will visually order them so "Send" appears before "Share Location" -->
+              <button id="location" type="button" class="btn btn-ghost">
+                Share Location
+              </button>
+              <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- keep original templates exactly as provided -->
+    <script id="msg-template" type="text/html">
+      <div><p>{{username}}-{{createdAt}}</p></div>
+      <div><p>{{message}}</p></div>
+    </script>
+
+    <div id="location-msg"></div>
+
+    <script id="location-template" type="text/html">
+      <div>
+        <p>{{username}}-{{createdAt}}</p>
+        <a href="{{url}}" target="_blank"><p>my current location</p></a>
+      </div>
+    </script>
+
+    <script id="sidebar-template" type="text/html">
+      <h1>room</h1>
+      <p>{{room}}</p>
+      <ul>
+        {{#users}}
+        <li>{{username}}</li>
+        {{/users}}
+      </ul>
+    </script>
+
+    <!-- libs and your chat script (unchanged) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.14.0/qs.min.js"></script>

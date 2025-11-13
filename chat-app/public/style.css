@@ -1,0 +1,344 @@
+/* =========================
+   Theme variables (use these across the app)
+   ========================= */
+:root {
+  --primary-1: #6a11cb; /* purple */
+  --primary-2: #2575fc; /* blue */
+  --accent: #00c6ff; /* cyan-ish highlight */
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-strong: rgba(255, 255, 255, 0.12);
+  --text-light: #ffffff;
+  --muted: rgba(224, 224, 224, 0.9);
+  --shadow: 0 10px 25px rgba(16, 24, 40, 0.35);
+  --radius: 14px;
+  --max-width: 420px;
+  --ui-font: "Poppins", system-ui, -apple-system, "Helvetica Neue", Arial;
+}
+
+/* Basic reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--ui-font);
+}
+html,
+body {
+  height: 100%;
+}
+
+/* =========================
+   Background: layered, animated, unique
+   ========================= */
+.bg-root {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* slow multi-stop gradient that shifts */
+.bg-gradient {
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(
+    120deg,
+    var(--primary-1) 0%,
+    var(--primary-2) 40%,
+    var(--accent) 100%
+  );
+  filter: saturate(110%);
+  transform: scale(1.2);
+  animation: gradientShift 14s ease-in-out infinite;
+  z-index: -5;
+}
+
+/* subtle diagonal grid overlay */
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mix-blend-mode: overlay;
+  z-index: -1;
+  transform: translateZ(0);
+  opacity: 0.7;
+  animation: gridFloat 20s linear infinite;
+}
+
+/* soft blurred blobs for organic motion */
+.bg-blob {
+  position: absolute;
+  filter: blur(40px) saturate(120%);
+  opacity: 0.9;
+  mix-blend-mode: screen;
+  transform-origin: center;
+}
+
+.blob-1 {
+  width: 520px;
+  height: 520px;
+  left: -12%;
+  top: -8%;
+  background: radial-gradient(
+      circle at 30% 30%,
+      rgba(255, 255, 255, 0.05),
+      rgba(255, 255, 255, 0) 35%
+    ),
+    radial-gradient(
+      circle at 60% 60%,
+      rgba(255, 255, 255, 0.02),
+      rgba(0, 0, 0, 0) 40%
+    ),
+    linear-gradient(180deg, rgba(106, 17, 203, 0.9), rgba(37, 117, 252, 0.7));
+  animation: blobMoveA 18s ease-in-out infinite;
+  z-index: -4;
+  border-radius: 50%;
+}
+
+.blob-2 {
+  width: 420px;
+  height: 420px;
+  right: -10%;
+  bottom: -12%;
+  background: radial-gradient(
+      circle at 40% 40%,
+      rgba(255, 255, 255, 0.04),
+      rgba(255, 255, 255, 0) 30%
+    ),
+    linear-gradient(120deg, rgba(0, 198, 255, 0.85), rgba(37, 117, 252, 0.65));
+  animation: blobMoveB 20s ease-in-out infinite;
+  z-index: -3;
+  border-radius: 48% 52% 50% 50% / 55% 45% 60% 40%;
+}
+
+/* very subtle noise overlay (svg) */
+.bg-noise {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* background animations */
+@keyframes gradientShift {
+  0% {
+    transform: scale(1.18) rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    transform: scale(1.25) rotate(3deg);
+    filter: hue-rotate(20deg);
+  }
+  100% {
+    transform: scale(1.18) rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+}
+
+@keyframes blobMoveA {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(18px, -30px) scale(1.03);
+  }
+  50% {
+    transform: translate(0, 8px) scale(0.98);
+  }
+  75% {
+    transform: translate(-20px, 24px) scale(1.02);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes blobMoveB {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  30% {
+    transform: translate(-26px, 20px) rotate(6deg) scale(1.02);
+  }
+  60% {
+    transform: translate(12px, -20px) rotate(-4deg) scale(0.98);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes gridFloat {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-30px);
+  }
+}
+
+/* =========================
+   UI container and glass card
+   ========================= */
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  color: var(--text-light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: transparent;
+}
+
+/* center container */
+.container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  z-index: 10;
+}
+
+/* glass panel */
+.join-box {
+  width: min(92%, var(--max-width));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.02)
+  );
+  border-radius: var(--radius);
+  padding: 36px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px) saturate(120%);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+/* floating accent stripe (keeps color identity across app) */
+.join-box::before {
+  content: "";
+  position: absolute;
+  left: -40px;
+  top: -60px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(
+      circle at 30% 30%,
+      rgba(255, 255, 255, 0.02),
+      transparent 40%
+    ),
+    linear-gradient(135deg, var(--primary-1), var(--primary-2));
+  transform: rotate(25deg);
+  opacity: 0.14;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* title */
+.title {
+  color: var(--text-light);
+  font-size: 26px;
+  margin-bottom: 18px;
+  letter-spacing: 0.4px;
+  text-transform: capitalize;
+  z-index: 2;
+  position: relative;
+}
+
+/* labels & inputs */
+.form-label {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 6px;
+  z-index: 2;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-light);
+  font-size: 14px;
+  outline: none;
+  transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+  z-index: 2;
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.form-input:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 117, 252, 0.12);
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* big but elegant button using theme colors */
+.btn-join {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  background: linear-gradient(90deg, var(--primary-1), var(--primary-2));
+  color: white;
+  box-shadow: 0 8px 18px rgba(37, 117, 252, 0.18);
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+  z-index: 2;
+}
+
+.btn-join:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 28px rgba(37, 117, 252, 0.22);
+  opacity: 0.98;
+}
+
+/* subtle small-screen adjustments */
+@media (max-width: 480px) {
+  .join-box {
+    padding: 22px;
+    border-radius: 12px;
+  }
+  .title {
+    font-size: 20px;
+  }
+  .form-input {
+    padding: 10px 12px;
+  }
+}
+
+/* Accessibility: reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .bg-gradient,
+  .bg-blob,
+  .bg-grid {
+    animation: none;
+  }
+  .form-input:focus,
+  .btn-join:hover {
+    transform: none;
+  }
+}
