@@ -3,10 +3,13 @@ import express from "express";
 import httpError from "./middleware/errorHandler.js";
 import connectDb from "./db/mongoose.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json());
+
+app.use(cors());
 
 app.use("/task", taskRoutes);
 
