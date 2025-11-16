@@ -43,7 +43,7 @@ const App = () => {
       setTodoData((prev) => [...prev, newData]);
 
       try {
-        const res = await axios.post("http://localhost:5000/add", newData);
+        const res = await axios.post("http://localhost:5000/task/add", newData);
 
         if (res.status === 201) {
           alert("data added successfully");
