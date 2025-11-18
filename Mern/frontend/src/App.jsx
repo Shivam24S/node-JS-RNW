@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InputForm from "./component/InputForm";
 import TodoList from "./TodoList";
 import axios from "axios";
@@ -21,6 +21,24 @@ const App = () => {
 
   const [editVal, setEditVal] = useState(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/task/allTask");
+
+        if (res.status !== 200) {
+          throw new Error("failed to load data");
+        }
+
+        setTodoData(res.data.taskData);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    fetchData();
+  }, [todoData]);
+
   const addTodo = async (input) => {
     if (!input.task || !input.description) {
       return alert("please provide task and description data");
@@ -32,6 +50,22 @@ const App = () => {
             : t
         )
       );
+
+      const updateTodoData = {
+        task: input.task,
+        description: input.description,
+      };
+
+      await axios.patch(
+        `http:localhost:5000/task/${editVal.id}`,
+        updateTodoData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       setEditVal(null);
     } else {
       const newData = {

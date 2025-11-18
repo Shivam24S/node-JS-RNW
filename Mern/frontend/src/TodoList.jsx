@@ -10,20 +10,18 @@ const TodoList = ({ todoData, editTodo, deleteTodo }) => {
           </tr>
         </thead>
         <tbody>
-          {todoData.map((todo) => {
-            return (
-              <tr key={todo.id}>
-                <td>{todo.task}</td>
-                <td>{todo.description}</td>
-                <td>
-                  <button onClick={() => editTodo(todo.id)}>Edit</button>
-                </td>
-                <td>
-                  <button onClick={() => deleteTodo(todo.id)}>Delete</button>
-                </td>
-              </tr>
-            );
-          })}
+          {todoData.map((t) => (
+            <tr key={t.id}>
+              <td>{t.task}</td>
+              <td>{t.description}</td>
+              <td>
+                <button onClick={() => editTodo(t.id)}>edit</button>
+              </td>
+              <td>
+                <button onClick={() => deleteTodo(t.id)}>delete</button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>
