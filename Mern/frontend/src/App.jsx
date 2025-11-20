@@ -4,20 +4,7 @@ import TodoList from "./TodoList";
 import axios from "axios";
 
 const App = () => {
-  const initialState = [
-    {
-      id: 1,
-      task: "learn",
-      description: "learn react",
-    },
-    {
-      id: 2,
-      task: "practice",
-      description: "practice react in detail",
-    },
-  ];
-
-  const [todoData, setTodoData] = useState(initialState);
+  const [todoData, setTodoData] = useState([]);
 
   const [editVal, setEditVal] = useState(null);
 
@@ -37,7 +24,7 @@ const App = () => {
     };
 
     fetchData();
-  }, [todoData]);
+  }, []);
 
   const addTodo = async (input) => {
     if (!input.task || !input.description) {
@@ -45,7 +32,7 @@ const App = () => {
     } else if (editVal) {
       setTodoData((prevData) =>
         prevData.map((t) =>
-          t.id === editVal.id
+          t._id === editVal._id
             ? { ...t, task: input.task, description: input.description }
             : t
         )
@@ -57,7 +44,7 @@ const App = () => {
       };
 
       await axios.patch(
-        `http:localhost:5000/task/${editVal.id}`,
+        `http://localhost:5000/task/${editVal._id}`,
         updateTodoData,
         {
           headers: {
@@ -91,16 +78,40 @@ const App = () => {
   };
 
   const editTodo = (id) => {
-    const editValue = todoData.find((t) => t.id === id);
+    console.log("edit ID", id);
+
+    const editValue = todoData.find((t) => t._id === id);
+
+    console.log("editValue", editValue);
 
     setEditVal(editValue);
   };
 
-  const deleteTodo = (id) => {
-    const deleteVal = todoData.filter((t) => t.id !== id);
+  const deleteTodo = async (id) => {
+    console.log("delete ID", id);
+
+    const deleteVal = todoData.filter((t) => t._id !== id);
 
     setTodoData(deleteVal);
+
+    try {
+      const res = await axios.delete(`http://localhost:5000/task/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.status !== 200) {
+        throw new Error("failed to delete data");
+      } else {
+        alert("data deleted successfully");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
+
+  console.log("editVal", editVal);
 
   return (
     <>

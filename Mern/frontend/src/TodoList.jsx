@@ -1,4 +1,6 @@
 const TodoList = ({ todoData, editTodo, deleteTodo }) => {
+  console.log("todo", todoData);
+
   return (
     <>
       <table border="2px solid black">
@@ -11,14 +13,14 @@ const TodoList = ({ todoData, editTodo, deleteTodo }) => {
         </thead>
         <tbody>
           {todoData.map((t) => (
-            <tr key={t.id}>
+            <tr key={t._id}>
               <td>{t.task}</td>
               <td>{t.description}</td>
               <td>
-                <button onClick={() => editTodo(t.id)}>edit</button>
+                <button onClick={() => editTodo(t._id)}>edit</button>
               </td>
               <td>
-                <button onClick={() => deleteTodo(t.id)}>delete</button>
+                <button onClick={() => deleteTodo(t._id)}>delete</button>
               </td>
             </tr>
           ))}
