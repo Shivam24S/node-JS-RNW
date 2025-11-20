@@ -95,16 +95,12 @@ const App = () => {
     setTodoData(deleteVal);
 
     try {
-      const res = await axios.delete(`http://localhost:5000/task/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await axios.delete(`http://localhost:5000/task/${id}`);
 
       if (res.status !== 200) {
         throw new Error("failed to delete data");
       } else {
-        alert("data deleted successfully");
+        alert("data deleted");
       }
     } catch (error) {
       console.log(error.message);
